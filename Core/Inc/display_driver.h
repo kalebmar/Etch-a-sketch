@@ -1,12 +1,8 @@
 #ifndef INC_DISPLAY_H_
-#include <stdio.h>
-#include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdlib.h>
 #include "main.h"
 #include "hardware.h"
-#include "clown.h"
 #define INC_DISPLAY_H_
 
 /************************************************************
@@ -33,9 +29,9 @@ typedef enum {
 } display_reset;
 
 typedef enum {
-	LEFT_AND_RIGHT_SIDE,    	// 0
-	LEFT_SIDE,    	// 1
-	RIGHT_SIDE,    	// 2
+	LEFT_AND_RIGHT_SIDE,    // 0
+	LEFT_SIDE,    			// 1
+	RIGHT_SIDE,    			// 2
 } chipSelect;
 
 
@@ -49,10 +45,11 @@ typedef struct lcdStatus{
 						Variables
  ************************************************************/
 
+extern UART_HandleTypeDef huart2;
 extern lcdStatus lcdState;
 extern hwStatusTypedef hwStatus;
+
 extern uint8_t pseudoRAM[1024];
-extern UART_HandleTypeDef huart2;
 
 extern const uint8_t opening[];
 
@@ -88,6 +85,10 @@ void disableBuffer(void);
 void writeDataBits(uint8_t data);
 uint8_t readDataBits(void);
 
+//GPIO input/output
+void GPIOtoInput(void);
+void GPIOtoOutput(void);
+
 // Display instructions
 void displayON(void);
 void displayOFF(void);
@@ -97,21 +98,5 @@ void setAddressZ(uint8_t addressZ, uint8_t sideSelect);
 void statusRead(uint8_t sideSelect);
 void writeDisplay(uint8_t data, uint8_t sideSelect);
 uint8_t readDisplay(uint8_t sideSelect);
-
-// High-level interface
-void displayInit(void);
-void clearDisplay(void);
-void floodDisplay(void);
-void pictureToDisplay(const unsigned char array[]);
-void playClown(void);
-void saveDisplay(void);
-void loadPicture(void);
-void cursorOff(uint16_t rawValueX, uint16_t rawValueY);
-void drawToDisplay(uint16_t rawValueX, uint16_t rawValueY);
-uint8_t storeFromDisplay(uint16_t rawValueX, uint16_t rawValueY);
-
-// Test functions
-void drawToDisplayTest(uint8_t xPixel, uint8_t yPixel, uint8_t value);
-uint8_t readFromDisplayTest(uint8_t xPixel, uint8_t yPixel);
 
 #endif /* INC_DISPLAY_H_ */

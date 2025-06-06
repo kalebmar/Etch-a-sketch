@@ -1,6 +1,24 @@
 #ifndef DISPLAY_APP_H_
+#include <stdint.h>
 #define DISPLAY_APP_H_
 
+/************************************************************
+						Functions
+ ************************************************************/
 
+// High-level interface
+void displayInit(void);
+void clearDisplay(void);
+void floodDisplay(void);
+void pictureToDisplay(const unsigned char array[]);
+void playClown(void);
+void sendDisplayData(void);
+void loadDisplayData(void);
+void cursorOff(uint16_t rawValueX, uint16_t rawValueY);
+void drawToDisplay(uint16_t rawValueX, uint16_t rawValueY);
+uint8_t storeFromDisplay(uint16_t rawValueX, uint16_t rawValueY);
 
+// Test functions
+void drawToDisplayTest(uint8_t xPixel, uint8_t yPixel, uint8_t value);
+uint8_t readFromDisplayTest(uint8_t xPixel, uint8_t yPixel);
 #endif /* DISPLAY_APP_H_ */

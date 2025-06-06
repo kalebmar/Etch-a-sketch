@@ -1,9 +1,6 @@
 #ifndef INC_HARDWARE_H_
-#include <stdio.h>
-#include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdlib.h>
 #include "main.h"
 #define INC_HARDWARE_H_
 

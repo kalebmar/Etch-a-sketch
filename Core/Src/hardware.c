@@ -1,11 +1,8 @@
-#include <display_driver.h>
 #include <hardware.h>
-#include <stdio.h>
-#include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdlib.h>
 #include "main.h"
+#include "display_app.h"
 
 /************************************************************
 						Variables
@@ -23,6 +20,7 @@ bool BTN2WaitForPress = true;
 						Functions
  ************************************************************/
 
+// Sets PWM pulse width on TIM3 CH4 based on inverted potentiometer input
 uint16_t setDisplayPWMPulse(uint16_t rawInput){
 	uint16_t pulse;
 	uint16_t counterPeriod = __HAL_TIM_GET_AUTORELOAD(&htim3); // To limit the pulse value to the counter period
@@ -31,6 +29,7 @@ uint16_t setDisplayPWMPulse(uint16_t rawInput){
 	return pulse;
 }
 
+// Adds new sample to circular buffer and updates index
 void rawNewValue(volatile filterArray* sampleArray, uint8_t length, uint16_t newSample){
 	uint8_t i = sampleArray->index;
 	if(i == (length - 1)) // Update index before adding new value -> Index points to latest value
@@ -42,7 +41,7 @@ void rawNewValue(volatile filterArray* sampleArray, uint8_t length, uint16_t new
 	sampleArray->array[i] = newSample;
 }
 
-
+// Sorts array in ascending order using insertion sort
 void arrayInsertSort(uint16_t* array, uint8_t length) {
 	 for (uint8_t i = 1; i < length; i++) {
 	        uint16_t key = array[i];
@@ -58,12 +57,13 @@ void arrayInsertSort(uint16_t* array, uint8_t length) {
 	    }
 }
 
+// Filters array by trimming outer quarters, averaging middle half of sorted values
 uint16_t filter(uint16_t array[], uint8_t length){
 	uint8_t boundary = (length / 4); // The array is trimmed on each side by a quarter of its elements
 	uint8_t i;
+	uint16_t value;
 	uint32_t sum = 0; // ADC max value is 4095 -> 16 samples can be stored in uint16_t
 						// but just to be safe
-	uint16_t value;
 
 	arrayInsertSort(array, length);
 
@@ -76,6 +76,7 @@ uint16_t filter(uint16_t array[], uint8_t length){
 	return value;
 }
 
+// Converts ADC value to corresponding pixel row
 uint8_t valueToPixelRow(uint16_t value){ // 128x64 px display
 	uint8_t pixelRow;
 
@@ -85,6 +86,7 @@ uint8_t valueToPixelRow(uint16_t value){ // 128x64 px display
 }
 
 
+// Converts ADC value to corresponding pixel column
 // ADC can't read value over 4037
 // Valid values: 128 pixel * 31.5 ->  0-4031
 uint8_t valueToPixelCol(uint16_t value){ // 128x64 px display
@@ -98,8 +100,7 @@ uint8_t valueToPixelCol(uint16_t value){ // 128x64 px display
 
 
 // BTN2
-//Read the BTN2 (default state = 1). If pressed change the state of the cursor on release of the button.
-
+// Toggles cursor visibility and PWM setting based on BTN2 press and long press
 void cursorToggle(){
 	bool currState;
 
@@ -124,9 +125,7 @@ void cursorToggle(){
 }
 
 // BTN1
-// Once erase = true the function will only reset (set erase to false) the state of erase if the button is pressed again
-// The function processing the erase signal should reset it
-
+// Handles BTN1 press/release to toggle erase mode and clear display after long press
 void eraseDisplaySignal(){
 	bool currState;
 

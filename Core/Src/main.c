@@ -17,7 +17,6 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include <display_driver.h>
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -26,10 +25,11 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdlib.h>
 #include "hardware.h"
 #include "images.h"
 #include "comm.h"
+#include "display_app.h"
+#include "display_driver.h"
 
 /* USER CODE END Includes */
 
@@ -178,13 +178,13 @@ int main(void)
   drawToDisplayTest(5,22, 0x3D);
   drawToDisplayTest(76,63, 0x49);
 
-  data1 =readFromDisplayTest(0,0);
-  data1 =readFromDisplayTest(0,63);
-  data1 =readFromDisplayTest(127,63);
-  data1 =readFromDisplayTest(120,13);
-  data1 =readFromDisplayTest(5,22);
-  data1 =readFromDisplayTest(76,63);
-  data1 =readFromDisplayTest(0,0);
+  data1 = readFromDisplayTest(0,0);
+  data1 = readFromDisplayTest(0,63);
+  data1 = readFromDisplayTest(127,63);
+  data1 = readFromDisplayTest(120,13);
+  data1 = readFromDisplayTest(5,22);
+  data1 = readFromDisplayTest(76,63);
+  data1 = readFromDisplayTest(0,0);
   statusRead(LEFT_SIDE);
   statusRead(RIGHT_SIDE);
 
