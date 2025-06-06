@@ -1,0 +1,54 @@
+
+#Ignore thumbnails created by Windows
+Thumbs.db
+#Ignore files built by Visual Studio
+*.obj
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+[Bb]in
+[Dd]ebug*/
+*.lib
+*.sbr
+obj/
+[Rr]elease*/
+_ReSharper*/
+[Tt]est[Rr]esult*
+.vs/
+.idea/
+#Nuget packages folder
+packages/
+# STM32CubeIDE build és ideiglenes fájlok
+/Debug/
+/Release/
+/build/
+/Debug_*/
+/Release_*/
+/*.elf
+/*.hex
+/*.bin
+/*.map
+/*.lst
+/*.d
+/*.o
+/*.dep
+
+# STM32CubeIDE projekthez kapcsolódó metainformációk
+/.settings/
+/.cproject
+.project
+*.launch
+*.log
