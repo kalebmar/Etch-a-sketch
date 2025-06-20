@@ -169,26 +169,6 @@ int main(void)
 
   displayInit();
 
-  //pictureToDisplay(opening);
-  uint8_t data1;
-  drawToDisplayTest(0,0,0xFF);
-  drawToDisplayTest(0,63, 0x0F);
-  drawToDisplayTest(127,63, 0xAA);
-  drawToDisplayTest(120,13,0xEE);
-  drawToDisplayTest(5,22, 0x3D);
-  drawToDisplayTest(76,63, 0x49);
-
-  data1 = readFromDisplayTest(0,0);
-  data1 = readFromDisplayTest(0,63);
-  data1 = readFromDisplayTest(127,63);
-  data1 = readFromDisplayTest(120,13);
-  data1 = readFromDisplayTest(5,22);
-  data1 = readFromDisplayTest(76,63);
-  data1 = readFromDisplayTest(0,0);
-  statusRead(LEFT_SIDE);
-  statusRead(RIGHT_SIDE);
-
-
 
   /* USER CODE END 2 */
 
