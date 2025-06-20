@@ -179,6 +179,35 @@ void pictureToDisplay(const uint8_t array[]) {
 	}
 }
 
+// Compare new image to previous image
+// Only update the display where they are different
+// The arrays contain 8 pages (rows), each with 128 bytes (columns)
+// Each byte represents 8 vertical pixels in a column within a page
+void animationToDisplay(const uint8_t prevImage[], const uint8_t newImage[]) {
+	uint8_t xPixel;
+	uint8_t yPixel;
+	uint8_t data;
+
+	for (yPixel = 0; yPixel < 8; yPixel++) {
+		for (xPixel = 0; xPixel < 128; xPixel++) {
+			if(newImage[xPixel + 128 * yPixel] == prevImage[xPixel + 128 * yPixel])
+				break;
+			else if (xPixel < 64) { // 0-63 left side CS1
+				setAddressX(yPixel, LEFT_SIDE); // In one page there is 8px
+				data = newImage[xPixel + 128 * yPixel];
+				writeDisplay(data, LEFT_SIDE);
+				HAL_Delay(75);
+			}
+			else { // 64-127 right side CS2
+				setAddressX(yPixel, RIGHT_SIDE); // In one page there is 8px
+				data = newImage[xPixel + 128 * yPixel];
+				writeDisplay(data, RIGHT_SIDE);
+				HAL_Delay(75);
+			}
+		}
+	}
+}
+
 // Read a byte from the display memory at given pixel coordinates (x, y)
 uint8_t readFromDisplayTest(uint8_t xPixel, uint8_t yPixel) {
 	uint8_t data;
