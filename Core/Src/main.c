@@ -169,6 +169,8 @@ int main(void)
 
   displayInit();
 
+  pictureToDisplay(opening);
+
 
   /* USER CODE END 2 */
 

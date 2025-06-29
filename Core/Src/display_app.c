@@ -6,6 +6,7 @@
 #include "main.h"
 #include "display_driver.h"
 #include "hardware.h"
+#include "images.h"
 
 /************************************************************
  Variables
@@ -158,7 +159,7 @@ void cursorOff(uint16_t rawValueX, uint16_t rawValueY) {
 // Write a full picture to the display from a byte array
 // The array contains 8 pages (rows), each with 128 bytes (columns)
 // Each byte represents 8 vertical pixels in a column within a page
-void pictureToDisplay(const uint8_t array[]) {
+void pictureToDisplay(const uint8_t* image) {
 	uint8_t xPixel;
 	uint8_t yPixel;
 	uint8_t data;
@@ -167,12 +168,12 @@ void pictureToDisplay(const uint8_t array[]) {
 		for (xPixel = 0; xPixel < 128; xPixel++) {
 			if (xPixel < 64) { // 0-63 left side CS1
 				setAddressX(yPixel, LEFT_SIDE); // In one page there is 8px
-				data = array[xPixel + 128 * yPixel];
+				data = image[xPixel + 128 * yPixel];
 				writeDisplay(data, LEFT_SIDE);
 			}
 			else { // 64-127 right side CS2
 				setAddressX(yPixel, RIGHT_SIDE); // In one page there is 8px
-				data = array[xPixel + 128 * yPixel];
+				data = image[xPixel + 128 * yPixel];
 				writeDisplay(data, RIGHT_SIDE);
 			}
 		}
@@ -183,26 +184,27 @@ void pictureToDisplay(const uint8_t array[]) {
 // Only update the display where they are different
 // The arrays contain 8 pages (rows), each with 128 bytes (columns)
 // Each byte represents 8 vertical pixels in a column within a page
-void animationToDisplay(const uint8_t prevImage[], const uint8_t newImage[]) {
+void animationToDisplay(const uint8_t* newImage) {
 	uint8_t xPixel;
 	uint8_t yPixel;
 	uint8_t data;
 
 	for (yPixel = 0; yPixel < 8; yPixel++) {
 		for (xPixel = 0; xPixel < 128; xPixel++) {
-			if(newImage[xPixel + 128 * yPixel] == prevImage[xPixel + 128 * yPixel])
-				break;
-			else if (xPixel < 64) { // 0-63 left side CS1
-				setAddressX(yPixel, LEFT_SIDE); // In one page there is 8px
-				data = newImage[xPixel + 128 * yPixel];
-				writeDisplay(data, LEFT_SIDE);
-				HAL_Delay(75);
-			}
-			else { // 64-127 right side CS2
-				setAddressX(yPixel, RIGHT_SIDE); // In one page there is 8px
-				data = newImage[xPixel + 128 * yPixel];
-				writeDisplay(data, RIGHT_SIDE);
-				HAL_Delay(75);
+			if (newImage[xPixel + 128 * yPixel]
+					!= pseudoRAM[xPixel + 128 * yPixel]) {
+				pseudoRAM[xPixel + 128 * yPixel] = newImage[xPixel + 128 * yPixel];
+				if (xPixel < 64) { // 0-63 left side CS1
+					setAddressX(yPixel, LEFT_SIDE); // In one page there is 8px
+					setAddressY(xPixel, LEFT_SIDE); // Display use y for horizontal x for vertical
+					data = pseudoRAM[xPixel + 128 * yPixel];
+					writeDisplay(data, LEFT_SIDE);
+				} else { // 64-127 right side CS2
+					setAddressX(yPixel, RIGHT_SIDE); // In one page there is 8px
+					setAddressY(xPixel - 64, RIGHT_SIDE); // Display use y for horizontal x for vertical
+					data = pseudoRAM[xPixel + 128 * yPixel];
+					writeDisplay(data, RIGHT_SIDE);
+				}
 			}
 		}
 	}
@@ -242,3 +244,15 @@ void drawToDisplayTest(uint8_t xPixel, uint8_t yPixel, uint8_t value) {
 		writeDisplay(value, RIGHT_SIDE);
 	}
 }
+
+// Play animation of two clowns
+void playClown() {
+	clearDisplay();
+	for (int j = 0; j < 5; j++) {
+		for (int i = 0; i < CLOWN_IMAGE_NUMBER; i++) {
+			animationToDisplay(CLOWN[i]);
+			HAL_Delay(100);
+		}
+	}
+}
+

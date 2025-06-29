@@ -49,6 +49,5 @@ packages/
 # STM32CubeIDE projekthez kapcsolódó metainformációk
 /.settings/
 /.cproject
-.project
 *.launch
 *.log

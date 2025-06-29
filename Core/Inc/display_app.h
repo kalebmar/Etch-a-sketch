@@ -10,8 +10,8 @@
 void displayInit(void);
 void clearDisplay(void);
 void floodDisplay(void);
-void pictureToDisplay(const uint8_t array[]);
-void animationToDisplay(const uint8_t prevImage[], const uint8_t newImage[]);
+void pictureToDisplay(const uint8_t* array);
+void animationToDisplay(const uint8_t* image);
 void playClown(void);
 void sendDisplayData(void);
 void loadDisplayData(void);
