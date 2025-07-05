@@ -1,6 +1,7 @@
-#include <hardware.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
+#include "hardware.h"
 #include "main.h"
 #include "display_app.h"
 

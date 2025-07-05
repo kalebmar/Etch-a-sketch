@@ -1,8 +1,9 @@
 #ifndef INC_HARDWARE_H_
+#define INC_HARDWARE_H_
+
 #include <stdbool.h>
 #include <stdint.h>
 #include "main.h"
-#define INC_HARDWARE_H_
 
 /************************************************************
 						Defines and enums

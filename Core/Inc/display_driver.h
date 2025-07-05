@@ -1,9 +1,9 @@
 #ifndef INC_DISPLAY_H_
-#include <stdbool.h>
-#include <stdint.h>
-#include "main.h"
-#include "hardware.h"
 #define INC_DISPLAY_H_
+
+#include <stdint.h>
+#include <stdbool.h>
+#include "main.h"
 
 /************************************************************
 						Defines and enums
@@ -47,7 +47,6 @@ typedef struct lcdStatus{
 
 extern UART_HandleTypeDef huart2;
 extern lcdStatus lcdState;
-extern hwStatusTypedef hwStatus;
 
 extern uint8_t pseudoRAM[1024];
 

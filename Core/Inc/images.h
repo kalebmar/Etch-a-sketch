@@ -1,6 +1,7 @@
 #ifndef IMAGES_H_
-#include <stdint.h>
 #define IMAGES_H_
+
+#include <stdint.h>
 
 /************************************************************
 						Defines and enums

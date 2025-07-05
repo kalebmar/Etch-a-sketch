@@ -1,5 +1,6 @@
 #include <display_driver.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "main.h"
 #include "hardware.h"
 

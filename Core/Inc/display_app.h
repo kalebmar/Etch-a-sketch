@@ -1,6 +1,7 @@
 #ifndef DISPLAY_APP_H_
-#include <stdint.h>
 #define DISPLAY_APP_H_
+
+#include <stdint.h>
 
 /************************************************************
 						Functions
