@@ -64,11 +64,14 @@ uint16_t filter(uint16_t array[], uint8_t length){
 	uint16_t value;
 	uint32_t sum = 0; // ADC max value is 4095 -> 16 samples can be stored in uint16_t
 						// but just to be safe
+	uint16_t tempArray[length];
 
-	arrayInsertSort(array, length);
+	memcpy(tempArray, array, length * sizeof(uint16_t));
+
+	arrayInsertSort(tempArray, length);
 
 	for(i = boundary; i < (length - boundary); i++){
-		sum = sum + array[i];
+		sum = sum + tempArray[i];
 	}
 
 	value = sum/(boundary * 2); // We sum half of the samples -> only divide with half of length
