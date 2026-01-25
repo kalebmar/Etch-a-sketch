@@ -187,10 +187,11 @@ int main(void)
 		if (hwStatus.setPWM)
 			setDisplayPWMPulse(filteredRightPot);
 		else if (hwStatus.clown) {
-			playClown();
+			playClownFast();
 			hwStatus.clown = false;
 		} else if (hwStatus.cursorOff)
-			cursorOff(filteredLeftPot, filteredRightPot);
+			//cursorOff(filteredLeftPot, filteredRightPot);
+			playClown();
 		else
 			drawToDisplay(filteredLeftPot, filteredRightPot);
 		keyCommand(buffer);

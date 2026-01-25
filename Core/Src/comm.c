@@ -10,11 +10,18 @@
 // This should be updated
 void keyCommand (uint8_t ch)
 {
-  if (ch == 'r')
-	  clearDisplay();
-  else if(ch == 's')
-	  sendDisplayData();
-  else if(ch == 'l')
-	  loadDisplayData();
-  buffer = '0' ;
+  switch (ch) {
+    case 'r':
+      clearDisplay();
+      break;
+    case 's':
+      sendDisplayData();
+      break;
+    case 'l':
+      loadDisplayData();
+      break;
+    default:
+      break;
+  }
+  buffer = '0';
 }

@@ -20,6 +20,10 @@ void cursorOff(uint16_t rawValueX, uint16_t rawValueY);
 void drawToDisplay(uint16_t rawValueX, uint16_t rawValueY);
 uint8_t storeFromDisplay(uint16_t rawValueX, uint16_t rawValueY);
 
+void animationToDisplayLeft(const uint8_t* image);
+void animationToDisplayRight(const uint8_t* image);
+void playClownFast(void);
+
 // Test functions
 void drawToDisplayTest(uint8_t xPixel, uint8_t yPixel, uint8_t value);
 uint8_t readFromDisplayTest(uint8_t xPixel, uint8_t yPixel);

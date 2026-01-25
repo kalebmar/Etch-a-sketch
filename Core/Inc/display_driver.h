@@ -10,7 +10,7 @@
  ************************************************************/
 
 //at 48 MHz, 1 cycle ≈ 20.83 ns
-#define LCD_TIMING_NOP_COUNT 22
+#define LCD_TIMING_NOP_COUNT 0
 #define CLOWN_REPEAT 8
 
 typedef enum {
