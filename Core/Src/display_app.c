@@ -19,7 +19,7 @@ uint8_t prevXpixel = 0;
  Functions
  ************************************************************/
 
-// Initialize the display: resets, configures, turns it on, clears it, and sets initial brightness
+// Initialise the display: resets, configures, turns it on, clears it, and sets initial brightness
 void displayInit() {
 
 	enableBuffer();
@@ -213,7 +213,6 @@ void animationToDisplay(const uint8_t* newImage) {
 // Read a byte from the display memory at given pixel coordinates (x, y)
 uint8_t readFromDisplayTest(uint8_t xPixel, uint8_t yPixel) {
 	uint8_t data;
-
 	if (xPixel < 64) { // 0-63 left side CS1
 		setAddressX(yPixel / 8, LEFT_SIDE); // In one page there is 8px
 		setAddressY(xPixel, LEFT_SIDE); // Display use y for vertical x for horizontal
@@ -230,7 +229,6 @@ uint8_t readFromDisplayTest(uint8_t xPixel, uint8_t yPixel) {
 
 // Write a byte to display memory at given pixel coordinates (x, y)
 void drawToDisplayTest(uint8_t xPixel, uint8_t yPixel, uint8_t value) {
-
 	if (xPixel < 64) { // 0-63 left side CS1
 		setAddressX(yPixel / 8, LEFT_SIDE); // In one page there is 8px
 		setAddressY(xPixel, LEFT_SIDE); // Display use y for vertical x for horizontal

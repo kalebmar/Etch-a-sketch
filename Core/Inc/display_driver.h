@@ -10,7 +10,7 @@
  ************************************************************/
 
 //at 48 MHz, 1 cycle ≈ 20.83 ns
-#define LCD_TIMING_NOP_COUNT 0
+#define LCD_TIMING_NOP_COUNT 30
 #define CLOWN_REPEAT 8
 
 typedef enum {
@@ -36,9 +36,12 @@ typedef enum {
 
 
 typedef struct lcdStatus{
-	bool resetState;
-	bool busyState;
-	bool on_offState;
+	bool resetStateLeft;
+	bool busyStateLeft;
+	bool on_offStateLeft;
+	bool resetStateRight;
+	bool busyStateRight;
+	bool on_offStateRight;
 } lcdStatus;
 
 /************************************************************
@@ -56,8 +59,14 @@ extern const uint8_t opening[];
 						Functions
  ************************************************************/
 
+// Wait LCD_TIMING_NOP_COUNT clock period
+// For NT7108 wait needs to be at least 450ns
+static inline __attribute__((always_inline)) void waitForTiming(){
+	for(uint8_t i = 0; i < LCD_TIMING_NOP_COUNT; i++)
+		__NOP();
+}
+
 // Display control
-void waitForTiming(void);
 void resetDisplay(void);
 void setDisplay(void);
 void enableDisplay(void);

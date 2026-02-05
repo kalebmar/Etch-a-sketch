@@ -23,16 +23,14 @@ PA12 DB7
 						Low level functions
  ************************************************************/
 
-// Wait LCD_TIMING_NOP_COUNT clock period
-// For NT7108 wait needs to be at least 450ns
-void waitForTiming(){
-	for(uint8_t i = 0; i < LCD_TIMING_NOP_COUNT; i++)
-		__NOP();
-}
 // Display reset is active low
 // /RST signal on PB9
-void resetDisplay(){
+void resetDisplayH(){
 	HAL_GPIO_WritePin(LCD_RST_GPIO_Port, LCD_RST_Pin, GPIO_PIN_RESET);
+}
+
+static inline __attribute__((always_inline)) void resetDisplay(){
+	LCD_RST_GPIO_Port->BRR = LCD_RST_Pin;
 }
 
 // Display reset is active low
@@ -40,35 +38,60 @@ void resetDisplay(){
 // Reset time is at least 1 us
 // After reset Display is OFF
 // Z address set to 0
-void setDisplay(){
+void setDisplayH(){
 	HAL_GPIO_WritePin(LCD_RST_GPIO_Port, LCD_RST_Pin, GPIO_PIN_SET);
 }
 
+static inline __attribute__((always_inline)) void setDisplay(){
+	LCD_RST_GPIO_Port->BSRR = LCD_RST_Pin;
+}
+
 // Display enable is active high
 // Enable signal on PC8
-void enableDisplay(){
+void enableDisplayH(){
 	HAL_GPIO_WritePin(LCD_ENABLE_GPIO_Port, LCD_ENABLE_Pin, GPIO_PIN_SET);
 }
 
+static inline __attribute__((always_inline)) void enableDisplay(){
+	LCD_ENABLE_GPIO_Port->BSRR = LCD_ENABLE_Pin;
+}
+
 // Display enable is active high
 // Enable signal on PC8
-void disableDisplay(){
+void disableDisplayH(){
 	HAL_GPIO_WritePin(LCD_ENABLE_GPIO_Port, LCD_ENABLE_Pin, GPIO_PIN_RESET);
 }
 
-// Data or instruction H: Data  L : Instruction
-// Data or instruction signal on PB8
-void sendDataToDisplay(){
-	HAL_GPIO_WritePin(LCD_DI_GPIO_Port, LCD_DI_Pin, GPIO_PIN_SET);
-}
-void receiveDataFromDisplay(){
-	HAL_GPIO_WritePin(LCD_DI_GPIO_Port, LCD_DI_Pin, GPIO_PIN_SET);
+static inline __attribute__((always_inline)) void disableDisplay(){
+	LCD_ENABLE_GPIO_Port->BRR = LCD_ENABLE_Pin;
 }
 
 // Data or instruction H: Data  L : Instruction
 // Data or instruction signal on PB8
-void sendInstructionToDisplay(){
+void sendDataToDisplayH(){
+	HAL_GPIO_WritePin(LCD_DI_GPIO_Port, LCD_DI_Pin, GPIO_PIN_SET);
+}
+
+static inline __attribute__((always_inline)) void sendDataToDisplay(){
+	LCD_DI_GPIO_Port->BSRR = LCD_DI_Pin;
+}
+
+void receiveDataFromDisplayH(){
+	HAL_GPIO_WritePin(LCD_DI_GPIO_Port, LCD_DI_Pin, GPIO_PIN_SET);
+}
+
+static inline __attribute__((always_inline)) void receiveDataFromDisplay(){
+	LCD_DI_GPIO_Port->BSRR = LCD_DI_Pin;
+}
+
+// Data or instruction H: Data  L : Instruction
+// Data or instruction signal on PB8
+void sendInstructionToDisplayH(){
 	HAL_GPIO_WritePin(LCD_DI_GPIO_Port, LCD_DI_Pin, GPIO_PIN_RESET);
+}
+
+static inline __attribute__((always_inline)) void sendInstructionToDisplay(){
+	LCD_DI_GPIO_Port->BRR = LCD_DI_Pin;
 }
 
 // Display left side select CS1 is active L
@@ -78,7 +101,7 @@ void sendInstructionToDisplay(){
 // 0 both selected
 // 1 CS1 selected
 // 2 CS2 selected
-void selectDisplaySide(uint8_t sideSelect){
+void selectDisplaySideH(uint8_t sideSelect){
 	if(sideSelect == LEFT_AND_RIGHT_SIDE){
 		HAL_GPIO_WritePin(LCD_CS1_GPIO_Port, LCD_CS1_Pin, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(LCD_CS2_GPIO_Port, LCD_CS2_Pin, GPIO_PIN_RESET);
@@ -87,6 +110,17 @@ void selectDisplaySide(uint8_t sideSelect){
 		HAL_GPIO_WritePin(LCD_CS1_GPIO_Port, LCD_CS1_Pin, GPIO_PIN_RESET);
 	else if(sideSelect == RIGHT_SIDE)
 		HAL_GPIO_WritePin(LCD_CS2_GPIO_Port, LCD_CS2_Pin, GPIO_PIN_RESET);
+}
+
+static inline __attribute__((always_inline)) void selectDisplaySide(uint8_t sideSelect){
+	if(sideSelect == LEFT_AND_RIGHT_SIDE){
+		LCD_CS1_GPIO_Port->BRR = LCD_CS1_Pin;
+		LCD_CS2_GPIO_Port->BRR = LCD_CS2_Pin;
+	}
+	else if(sideSelect == LEFT_SIDE)
+		LCD_CS1_GPIO_Port->BRR = LCD_CS1_Pin;
+	else if(sideSelect == RIGHT_SIDE)
+		LCD_CS2_GPIO_Port->BRR = LCD_CS2_Pin;
 }
 
 // Display left side select CS1 is active L
@@ -96,7 +130,7 @@ void selectDisplaySide(uint8_t sideSelect){
 // 0 both selected -> only use it for write / instructions
 // 1 CS1 selected
 // 2 CS2 selected
-void deselectDisplaySide(uint8_t sideSelect){
+void deselectDisplaySideH(uint8_t sideSelect){
 	if(sideSelect == LEFT_AND_RIGHT_SIDE){
 		HAL_GPIO_WritePin(LCD_CS1_GPIO_Port, LCD_CS1_Pin, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(LCD_CS2_GPIO_Port, LCD_CS2_Pin, GPIO_PIN_SET);
@@ -107,32 +141,58 @@ void deselectDisplaySide(uint8_t sideSelect){
 		HAL_GPIO_WritePin(LCD_CS2_GPIO_Port, LCD_CS2_Pin, GPIO_PIN_SET);
 }
 
+static inline __attribute__((always_inline)) void deselectDisplaySide(uint8_t sideSelect){
+	if(sideSelect == LEFT_AND_RIGHT_SIDE){
+		LCD_CS1_GPIO_Port->BSRR = LCD_CS1_Pin;
+		LCD_CS2_GPIO_Port->BSRR = LCD_CS2_Pin;
+	}
+	else if(sideSelect == LEFT_SIDE)
+		LCD_CS1_GPIO_Port->BSRR = LCD_CS1_Pin;
+	else if(sideSelect == RIGHT_SIDE)
+		LCD_CS2_GPIO_Port->BSRR = LCD_CS2_Pin;
+}
+
 
 // Read or write data to display MCU read: H MCU write: L
 // Read Write signal on PC6
-void readDisplayDataPin(){
+void readDisplayDataPinH(){
 	HAL_GPIO_WritePin(LCD_RW_GPIO_Port, LCD_RW_Pin, GPIO_PIN_SET);
 }
 
+static inline __attribute__((always_inline)) void readDisplayDataPin(){
+	LCD_RW_GPIO_Port->BSRR = LCD_RW_Pin;
+}
+
 // Read or write data to display MCU read: H MCU write: L
 // Read Write signal on PC6
-void writeDisplayDataPin(){
+void writeDisplayDataPinH(){
 	HAL_GPIO_WritePin(LCD_RW_GPIO_Port, LCD_RW_Pin, GPIO_PIN_RESET);
 }
 
+static inline __attribute__((always_inline)) void writeDisplayDataPin(){
+	LCD_RW_GPIO_Port->BRR = LCD_RW_Pin;
+}
 
 // Enables the Output of the buffer IC NOT related to display
 // _245OE signal is active L
 // _245OE signal on PC12
-void enableBuffer(){
+void enableBufferH(){
 	HAL_GPIO_WritePin(_245OE_GPIO_Port, _245OE_Pin, GPIO_PIN_RESET);
+}
+
+static inline __attribute__((always_inline)) void enableBuffer(){
+	_245OE_GPIO_Port->BRR = _245OE_Pin;
 }
 
 // Disables the Output of the buffer IC NOT related to display
 // _245OE signal is active L
 // _245OE signal on PC12
-void disableBuffer(){
+void disableBufferH(){
 	HAL_GPIO_WritePin(_245OE_GPIO_Port, _245OE_Pin, GPIO_PIN_SET);
+}
+
+static inline __attribute__((always_inline)) void disableBuffer(){
+	_245OE_GPIO_Port->BSRR = _245OE_Pin;
 }
 
 // Sets the pins of DB7-DB0
@@ -344,28 +404,37 @@ void setAddressZ(uint8_t addressZ, uint8_t sideSelect){
 void statusRead(uint8_t sideSelect){
 	uint8_t statusBits;
 
-	GPIOtoInput();
+	if(sideSelect != LEFT_AND_RIGHT_SIDE){
+		selectDisplaySide(sideSelect);
+	}
+	else {
+		GPIOtoInput();
 
-	if(sideSelect != LEFT_AND_RIGHT_SIDE)
-	selectDisplaySide(sideSelect);
+		sendInstructionToDisplay();
+		readDisplayDataPin();
 
-	sendInstructionToDisplay();
-	readDisplayDataPin();
+		waitForTiming();
 
-	waitForTiming();
+		enableDisplay();
+		waitForTiming();
 
-	enableDisplay();
-	waitForTiming();
+		statusBits = readDataBits();
+		disableDisplay();
+		deselectDisplaySide(sideSelect);
 
-	statusBits = readDataBits();
-	disableDisplay();
-	deselectDisplaySide(sideSelect);
+		GPIOtoOutput();
 
-	GPIOtoOutput();
-
-	lcdState.busyState = (statusBits & 0x80) >> 7;
-	lcdState.on_offState = (statusBits & 0x20) >> 5;
-	lcdState.resetState = (statusBits & 0x10) >> 4;
+		if(sideSelect == LEFT_SIDE){
+			lcdState.busyStateLeft = (statusBits & 0x80) >> 7;
+			lcdState.on_offStateLeft = (statusBits & 0x20) >> 5;
+			lcdState.resetStateLeft = (statusBits & 0x10) >> 4;
+		}
+		else if(sideSelect == RIGHT_SIDE){
+			lcdState.busyStateRight = (statusBits & 0x80) >> 7;
+			lcdState.on_offStateRight = (statusBits & 0x20) >> 5;
+			lcdState.resetStateRight = (statusBits & 0x10) >> 4;
+		}
+	}
 }
 
 // WRITE DISPLAY DATA
@@ -417,6 +486,8 @@ uint8_t readDisplay(uint8_t sideSelect){
 	waitForTiming();
 	data = readDataBits();
 	disableDisplay();
+
+	deselectDisplaySide(sideSelect);
 
 	GPIOtoOutput();
 
