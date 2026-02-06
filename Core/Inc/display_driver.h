@@ -10,7 +10,7 @@
  ************************************************************/
 
 //at 48 MHz, 1 cycle ≈ 20.83 ns
-#define LCD_TIMING_NOP_COUNT 22
+#define LCD_TIMING_NOP_COUNT 100
 #define CLOWN_REPEAT 8
 
 typedef enum {
@@ -227,17 +227,16 @@ static inline __attribute__((always_inline)) uint8_t readDataBits(){
 
 // Sets PA12-PA5 to GPIO input
 static inline __attribute__((always_inline)) void GPIOtoInput(){
-		GPIOA->MODER = GPIOA->MODER & 0xFC0003FF;
-		GPIOA->PUPDR = GPIOA->PUPDR & 0xFC0003FF;
+		GPIOA->MODER = GPIOA->MODER & 0xFC0003FF; // PA5-12 set to 00 -> Input mode
+		GPIOA->PUPDR = GPIOA->PUPDR & 0xFC0003FF; // PA5-12 set to 00 -> No pull-up, pull-down
 }
 
 // Sets PA12-PA5 to GPIO input
-
 static inline __attribute__((always_inline)) void GPIOtoOutput(){
-	GPIOA->MODER = (GPIOA->MODER & 0xFC0003FF) | 0x00155400; // pins set to general pupr output mode
-	GPIOA->OTYPER = GPIOA->OTYPER & 0x0000E01F; //output type set to push pull
-	GPIOA->OSPEEDR = GPIOA->OSPEEDR | 0x03FFFC00; //Set output to high speed
-	GPIOA->PUPDR = GPIOA->PUPDR & 0xFC0003FF;
+	GPIOA->MODER = (GPIOA->MODER & 0xFC0003FF) | 0x00155400; // PA5-12 set to 01 -> General purpose output mode
+	GPIOA->OTYPER = GPIOA->OTYPER & 0x0000E01F; // PA5-12 set to 01 -> Output push-pull
+	GPIOA->OSPEEDR = GPIOA->OSPEEDR | 0x03FFFC00; // PA5-12 set to 11 -> High speed
+	GPIOA->PUPDR = GPIOA->PUPDR & 0xFC0003FF; // PA5-12 set to 00 -> No pull-up, pull-down
 }
 
 #endif /* INC_DISPLAY_H_ */
