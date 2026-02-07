@@ -169,32 +169,6 @@ int main(void)
 
   displayInit();
 
-  uint8_t test_data = 0;
-
-
-  drawToDisplayTest(5,5,10);
-  test_data = readFromDisplayTest(5,5);
-
-  drawToDisplayTest(100,50,72);
-  test_data = readFromDisplayTest(100,50);
-
-  drawToDisplayTest(20,4,1);
-  test_data = readFromDisplayTest(20,4);
-
-  drawToDisplayTest(30,4,11);
-    test_data = readFromDisplayTest(30,4);
-
-    drawToDisplayTest(40,4,73);
-      test_data = readFromDisplayTest(40,4);
-
-      drawToDisplayTest(70,4,55);
-        test_data = readFromDisplayTest(70,4);
-
-  //statusRead(LEFT_SIDE);
-  //statusRead(RIGHT_SIDE);
-
-
-
   pictureToDisplay(opening);
 
 

@@ -186,12 +186,12 @@ void statusRead(uint8_t sideSelect){
 
 		if(sideSelect == LEFT_SIDE){
 			lcdState.busyStateLeft = (statusBits & 0x80) >> 7;
-			lcdState.on_offStateLeft = (statusBits & 0x20) >> 5;
+			lcdState.offStateLeft = (statusBits & 0x20) >> 5;
 			lcdState.resetStateLeft = (statusBits & 0x10) >> 4;
 		}
 		else if(sideSelect == RIGHT_SIDE){
 			lcdState.busyStateRight = (statusBits & 0x80) >> 7;
-			lcdState.on_offStateRight = (statusBits & 0x20) >> 5;
+			lcdState.offStateRight = (statusBits & 0x20) >> 5;
 			lcdState.resetStateRight = (statusBits & 0x10) >> 4;
 		}
 	}
@@ -242,7 +242,8 @@ uint8_t readDisplay(uint8_t sideSelect){
 		displayDisableSignal();
 		waitForTiming();
 
-		waitForTiming();
+		// dummy read
+
 		displayEnableSignal();
 		waitForTiming();
 		displayDisableSignal();
@@ -256,9 +257,4 @@ uint8_t readDisplay(uint8_t sideSelect){
 
 	return data;
 }
-
-
-
-
-
 
