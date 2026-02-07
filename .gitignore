@@ -1,7 +1,7 @@
-
-#Ignore thumbnails created by Windows
 Thumbs.db
-#Ignore files built by Visual Studio
+*.mxproject
+*.project
+*.ld
 *.obj
 *.exe
 *.pdb
@@ -29,9 +29,7 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 .vs/
 .idea/
-#Nuget packages folder
 packages/
-# STM32CubeIDE build és ideiglenes fájlok
 /Debug/
 /Release/
 /build/
@@ -46,7 +44,6 @@ packages/
 /*.o
 /*.dep
 
-# STM32CubeIDE projekthez kapcsolódó metainformációk
 /.settings/
 /.cproject
 *.launch
